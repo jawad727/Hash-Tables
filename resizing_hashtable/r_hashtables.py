@@ -1,5 +1,3 @@
-
-
 # '''
 # Linked List hash table key/value pair
 # '''
@@ -8,6 +6,8 @@ class LinkedPair:
         self.key = key
         self.value = value
         self.next = None
+    def __str__(self):
+        return f'key: {self.key}, value: {self.value}, next: {self.next}'
 
 
 # '''
@@ -17,14 +17,19 @@ class LinkedPair:
 # '''
 class HashTable:
     def __init__(self, capacity):
-        pass
+        self.capacity = capacity
+        self.count = 0
+        self.storage = [None] * capacity 
 
 
 # '''
 # Research and implement the djb2 hash function
 # '''
 def hash(string, max):
-    pass
+    hash = 5381
+    for x in string:
+        hash = (( hash << 5) + hash) + ord(x)
+    return hash % max
 
 
 # '''
@@ -32,8 +37,49 @@ def hash(string, max):
 
 # Hint: Used the LL to handle collisions
 # '''
+# def recursion1(node):
+#     while node.next != None:
+#         node = node.next
+#         recursion1(node)
+
+def recursion1(node):
+    loop = True
+    while loop:
+        if node.next != None:
+            node = node.next
+            recursion1(node)
+        else:
+            loop = False
+            return node
+
 def hash_table_insert(hash_table, key, value):
-    pass
+    index = hash(key, hash_table.capacity)
+    insertThis = LinkedPair(key, value)
+    bucketRootNode = hash_table.storage[index]
+    foo = None
+
+    if bucketRootNode is None:
+        hash_table.storage[index] = insertThis
+        return True
+    else:
+        current_node = recursion1(bucketRootNode)
+
+    current_node.next = insertThis
+
+
+
+# Get index by hashing key 
+# InsertThis = Pair(key, value, None)
+# bucketRootNode = hash_table.storage[index]
+
+
+# Check bucketRootNode and see if its empty
+    # If so hash_table.storage[index] = Pair
+
+# If not execute the following:
+    # While bucketRootNode.next != None
+        # keep going
+    # bucketRootNode.next = InsertThis 
 
 
 # '''
@@ -41,9 +87,62 @@ def hash_table_insert(hash_table, key, value):
 
 # If you try to remove a value that isn't there, print a warning.
 # '''
-def hash_table_remove(hash_table, key):
-    pass
 
+def recursion1(node):
+    loop = True
+    while loop:
+        if node.next != None:
+            node = node.next
+            recursion1(node)
+        else:
+            loop = False
+            return node
+
+
+def recursion2(node, key):
+    loop = True
+    while loop:
+        if node.key != key or node.next.next != None:
+            prev_node = node
+            node = node.next
+            recursion2(node, key)
+        else:
+            loop = False
+            return [node, node.next]
+
+
+# def recursion2(node, key):
+#     prev_node = None
+#     current_node = None
+#     while node.key != key or node.next != None:
+#         prev_node = node
+#         node = node.next
+#         recursion2(node, key)
+#     return [prev_node, current_node]
+
+
+def hash_table_remove(hash_table, key):
+    index = hash(key, hash_table.capacity)
+    rootNode = hash_table.storage[index]
+    if hash_table.storage[index] == None:
+        return None
+    else:
+        prev_node = recursion2(rootNode, key)[0]
+        cur_node = recursion2(rootNode, key)[1]
+        
+        prev_node.next = cur_node.next
+        cur_node = None
+
+#
+
+HT = HashTable(10)
+hash_table_insert(HT, 'John', "A")
+hash_table_insert(HT, 'John', "B")
+hash_table_insert(HT, 'John', "C")
+hash_table_remove(HT, "John")
+hash_table_insert(HT, 'John', "D")
+print(HT.storage[0])
+        
 
 # '''
 # Fill this in.
@@ -61,23 +160,23 @@ def hash_table_resize(hash_table):
     pass
 
 
-def Testing():
-    ht = HashTable(2)
+# def Testing():
+#     ht = HashTable(2)
 
-    hash_table_insert(ht, "line_1", "Tiny hash table")
-    hash_table_insert(ht, "line_2", "Filled beyond capacity")
-    hash_table_insert(ht, "line_3", "Linked list saves the day!")
+#     hash_table_insert(ht, "line_1", "Tiny hash table")
+#     hash_table_insert(ht, "line_2", "Filled beyond capacity")
+#     hash_table_insert(ht, "line_3", "Linked list saves the day!")
 
-    print(hash_table_retrieve(ht, "line_1"))
-    print(hash_table_retrieve(ht, "line_2"))
-    print(hash_table_retrieve(ht, "line_3"))
+#     print(hash_table_retrieve(ht, "line_1"))
+#     print(hash_table_retrieve(ht, "line_2"))
+#     print(hash_table_retrieve(ht, "line_3"))
 
-    old_capacity = len(ht.storage)
-    ht = hash_table_resize(ht)
-    new_capacity = len(ht.storage)
+#     old_capacity = len(ht.storage)
+#     ht = hash_table_resize(ht)
+#     new_capacity = len(ht.storage)
 
-    print("Resized hash table from " + str(old_capacity)
-          + " to " + str(new_capacity) + ".")
+#     print("Resized hash table from " + str(old_capacity)
+#           + " to " + str(new_capacity) + ".")
 
 
-Testing()
+# Testing()
