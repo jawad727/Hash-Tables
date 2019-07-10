@@ -140,7 +140,7 @@ hash_table_insert(HT, 'John', "A")
 hash_table_insert(HT, 'John', "B")
 hash_table_insert(HT, 'John', "C")
 hash_table_remove(HT, "John")
-hash_table_insert(HT, 'John', "C")
+hash_table_insert(HT, 'John', "D")
 print(HT.storage[0])
         
 
